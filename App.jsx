@@ -94,13 +94,51 @@ class App extends React.Component {
 
     render() {
         return (
-                <div className={style.container}>
+                <div className={style.containerFluid}>
+                    <br/>
+                    {
+                        <Form/>
+                    }
                     {
                         this.state.data.map((row, i) =>
                             <Row key = {i} row = {row}/>
                         )
                     }
                 </div>
+        )
+    }
+}
+
+class Form extends React.Component {
+    render() {
+        return (
+            <div className={style.container}>
+                <form method='get' action='' className={style.row}> 
+                    <div className={style.col}>
+                        <select style={{width:'300px'}} className={style['custom-select']} name='height'>
+                            <option selected>Select Height</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                        </select>
+                    </div>
+                    
+                    <div className={style.col}>
+                        <select style={{width:'300px'}} className={style['custom-select']}  name='width'>
+                            <option selected>Select Width</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                        </select>
+                    </div>
+                    
+                    <div className={style.col}>
+                        <button className={style.btn} type='submmit'>Resize</button>
+                    </div>
+                </form>
+            </div>
         )
     }
 }
@@ -118,19 +156,14 @@ class Row extends React.Component {
             'font-size': '25px',
             'backgroundColor': colors[Math.floor(Math.random()*colors.length)],
             'top': '100px',
-            'vertical-align': 'middle',
-            'line-height': '150px'
+            'line-height': '150px',
+            'height': '20vh'
         }
 
         return style
     }
     
     render() {
-        
-        var imgStyle = {
-            width: '100%',
-            height: '100%'
-        }
         
         return (     
           <div className={style.row}>
