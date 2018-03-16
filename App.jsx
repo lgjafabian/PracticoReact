@@ -113,7 +113,7 @@ class App extends React.Component {
 class Form extends React.Component {
     render() {
         return (
-            <div className={style.container} style={{'margin-bootom':'0px'}}>
+            <nav className={style.container} style={{'position':'fixed', 'height': '10px'}}>
                 <form method='get' action='' className={style.row}> 
                     <div className={style.col}>
                         <select style={{width:'300px'}} className={style['custom-select']} name='height'>
@@ -139,7 +139,7 @@ class Form extends React.Component {
                         <button className={style.btn} type='submmit'>Resize</button>
                     </div>
                 </form>
-            </div>
+            </nav>
         )
     }
 }
@@ -158,7 +158,9 @@ class Row extends React.Component {
             'backgroundColor': colors[Math.floor(Math.random()*colors.length)],
             'top': '100px',
             'line-height': '120px',
-            'height': '20vh'
+            'height': '20vh',
+            
+            '-webkit-transition': 'width'
         }
 
         return style
