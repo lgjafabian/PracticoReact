@@ -1,12 +1,13 @@
 import React from 'react';
+import style from './bootstrap.min.css';
 
 class App extends React.Component {
     constructor() {
         super()
           
         this.state = {
-            height: 4,
-            width: 4,
+            height: 5,
+            width: 3,
             data: [],
             flat: []
         }        
@@ -52,31 +53,27 @@ class App extends React.Component {
 
     render() {
         return (
-                <div>
-                <table>
-                <tbody>
+            <div className={style.container}>
                     {
                             this.state.data.map((row, i) =>
-                                <TableRow key = {i} row = {row} />
+                                <Row key = {i} row = {row} />
                             )
                     }
-                </tbody>
-                </table>
             </div>
-        );
+        )
     }
 }
 
-class TableRow extends React.Component {
+class Row extends React.Component {
     render() {
         return (
-          <tr>
+          <div className={style.row}>
              {
                  this.props.row.map((element, i) =>
-                    <td key={i}>{element.name}</td>
+                    <div className={style.col}  key={i}>{element.name}</div>
                 )
              }
-          </tr>
+          </div>
        );
     }
  }
