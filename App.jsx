@@ -1,16 +1,26 @@
 import React from 'react';
 import style from './bootstrap.min.css';
+import {
+    BrowserRouter as Router,
+    Route,
+    Link
+  } from 'react-router-dom'
 
 class App extends React.Component {
     constructor() {
         super()
           
         this.state = {
-            height: 5,
-            width: 3,
             data: [],
-            flat: []
-        }        
+            flat: [],
+            mod: 1
+        }
+
+        const query = new URLSearchParams(location.search)
+        const height = query.get('height') 
+        const width = query.get('width')
+        this.state.height = (height >= 2 && height <= 5)? height : 3
+        this.state.width = (width >= 2 && width <= 5)? width : 3
      }
      
      componentWillMount() {
@@ -29,7 +39,7 @@ class App extends React.Component {
                 fetch('https://api.mercadolibre.com/sites/MLA/search?q=' + element.keyword).then((response) => {
                     return response.json()
                 }).then((response) => {
-                    var aux = { name: element.keyword, url: response.results[0].thumbnail, id: response.results[0].category_id }
+                    var aux = { name: element.keyword, url: response.results[0].thumbnail, id: response.results[0].category_id}
                     
                     if (height >= this.state.height) {
                         return 
@@ -46,31 +56,85 @@ class App extends React.Component {
                 })
             })
         }).then(() => {
-            console.log(this.props)
-            this.t1 = setTimeout(() => this.forceUpdate(), 2000)
+            //this.state.data = this.shuffle(this.state.data)
+            this.t1 = setTimeout(() => {
+                this.alternateImg()
+                this.forceUpdate()
+            }, 1500)
         })
+    }
+
+    alternateImg() {
+        this.state.mod = (this.state.mod == 1) ? 0 : 1
+        for (var i=0 ; i< this.state.height ; i++) {
+            var flag = i%2 == this.state.mod    
+            for (var j=0 ; j < this.state.width ; j++) {
+                this.state.data[i][j].showImg = flag
+                flag = !flag
+            }
+        }
+    }
+
+    componentDidMount() {
+        setInterval( () => {
+            this.suffle(this.state.data)
+
+            this.alternateImg()
+
+            this.forceUpdate()
+        },5000)
+    }
+    
+    suffle(array) {
+        console.log("HOLA")
+        for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
     }
 
     render() {
         return (
-            <div className={style.container}>
+                <div className={style.container}>
                     {
-                            this.state.data.map((row, i) =>
-                                <Row key = {i} row = {row} />
-                            )
+                        this.state.data.map((row, i) =>
+                            <Row key = {i} row = {row}/>
+                        )
                     }
-            </div>
+                </div>
         )
     }
 }
 
 class Row extends React.Component {
     render() {
+
+        var box1 = {
+            'backgroundColor': 'aqua',
+            'position': 'relative',
+            'overflow': 'hidden'
+        }
+
+        var box2 = {
+            'backgroundColor': 'green',
+            'top': '100px'
+        }
+
+
+
+
         return (
+                 
           <div className={style.row}>
              {
                  this.props.row.map((element, i) =>
-                    <div className={style.col}  key={i}>{element.name}</div>
+                    <div className={style.col} style={box2} key={i}>
+                    {
+                        element.showImg?<img src={element.url}/> : <p>{element.name}</p>
+                    }
+                    
+                    </div>
+                
                 )
              }
           </div>
