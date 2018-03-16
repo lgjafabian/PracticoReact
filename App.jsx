@@ -1,5 +1,6 @@
 import React from 'react';
 import style from './bootstrap.min.css';
+import Styles from './test.css'
 import {
     BrowserRouter as Router,
     Route,
@@ -112,7 +113,7 @@ class App extends React.Component {
 class Form extends React.Component {
     render() {
         return (
-            <div className={style.container}>
+            <div className={style.container} style={{'margin-bootom':'0px'}}>
                 <form method='get' action='' className={style.row}> 
                     <div className={style.col}>
                         <select style={{width:'300px'}} className={style['custom-select']} name='height'>
@@ -156,7 +157,7 @@ class Row extends React.Component {
             'font-size': '25px',
             'backgroundColor': colors[Math.floor(Math.random()*colors.length)],
             'top': '100px',
-            'line-height': '150px',
+            'line-height': '120px',
             'height': '20vh'
         }
 
@@ -165,13 +166,17 @@ class Row extends React.Component {
     
     render() {
         
+        var boxP = {
+                'white-space': 'nowrap',
+                'overflow': 'hidden' 
+        }
         return (     
           <div className={style.row}>
              {
                  this.props.row.map((element, i) =>
                     <div className={style.col} style={this.getRandomStyle()} key={i}>
                     {
-                        element.showImg?<img src={element.url}/> : <p>{element.name}</p>
+                        element.showImg?<img src={element.url}/> : <p className={Styles.animationP} style={boxP}>  {element.name}</p>
                     }
                     
                     </div>

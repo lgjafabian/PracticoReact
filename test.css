@@ -1,4 +1,16 @@
-body {
-    margin: 0;
-    background-color: lightblue;
+.animationP{
+    width: 7.9em;
+    -webkit-animation: type 2s steps(40, end);
+    animation: type 2s steps(40, end);
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+
+}
+@keyframes type {
+0% {
+  width: 0;
+}
+100% {
+  border: none;
+}
 }
