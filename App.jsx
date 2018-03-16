@@ -56,7 +56,6 @@ class App extends React.Component {
                 })
             })
         }).then(() => {
-            //this.state.data = this.shuffle(this.state.data)
             this.t1 = setTimeout(() => {
                 this.alternateImg()
                 this.forceUpdate()
@@ -107,28 +106,37 @@ class App extends React.Component {
 }
 
 class Row extends React.Component {
+    
+    getRandomStyle() {
+        var colors = ['#34A852', '#4285F4', '#EA4335', '#FABB05']
+        
+        var style = {
+            'text-align':'center',
+            'font-family': 'Nunito,sans-serif',
+            'font-weight': '600',
+            'color': '#fff',
+            'font-size': '25px',
+            'backgroundColor': colors[Math.floor(Math.random()*colors.length)],
+            'top': '100px',
+            'vertical-align': 'middle',
+            'line-height': '150px'
+        }
+
+        return style
+    }
+    
     render() {
-
-        var box1 = {
-            'backgroundColor': 'aqua',
-            'position': 'relative',
-            'overflow': 'hidden'
+        
+        var imgStyle = {
+            width: '100%',
+            height: '100%'
         }
-
-        var box2 = {
-            'backgroundColor': 'green',
-            'top': '100px'
-        }
-
-
-
-
-        return (
-                 
+        
+        return (     
           <div className={style.row}>
              {
                  this.props.row.map((element, i) =>
-                    <div className={style.col} style={box2} key={i}>
+                    <div className={style.col} style={this.getRandomStyle()} key={i}>
                     {
                         element.showImg?<img src={element.url}/> : <p>{element.name}</p>
                     }
