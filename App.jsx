@@ -1,59 +1,81 @@
 import React from 'react';
-import axios from 'axios';
 
 class App extends React.Component {
     constructor() {
-        super();
+        super()
           
         this.state = {
-            height: 3,
-            width: 3,
-           data: 
-           [
-                [
-                    {id:'1', name:'a', url:'A'},
-                    {id:'2', name:'b', url:'B'},
-                    {id:'3', name:'c', url:'C'}
-                ],
-                [
-                    {id:'4', name:'d', url:'D'},
-                    {id:'5', name:'e', url:'E'},
-                    {id:'6', name:'f', url:'F'}
-                ],
-                [
-                    {id:'7', name:'g', url:'G'},
-                    {id:'8', name:'h', url:'H'},
-                    {id:'9', name:'i', url:'I'}
-                ]
-           ]
+            height: 4,
+            width: 4,
+            data: [],
+            flat: []
         }        
      }
      
+     componentWillMount() {
+   
+        fetch('https://api.mercadolibre.com/sites/MLA/trends/search').then((response) => {
+            return response.json()
+        }).then((response) => {
+            
+            this.state.flat = response
+            
+            var width = 0
+            var height = 0
+            var row = []
+            
+            response.forEach((element) => {
+                fetch('https://api.mercadolibre.com/sites/MLA/search?q=' + element.keyword).then((response) => {
+                    return response.json()
+                }).then((response) => {
+                    var aux = { name: element.keyword, url: response.results[0].thumbnail, id: response.results[0].category_id }
+                    
+                    if (height >= this.state.height) {
+                        return 
+                    }
+                    if (width < this.state.width) {
+                        row.push(aux)
+                        width ++
+                    } else if(width == this.state.width) {
+                        this.state.data.push(row)
+                        row = []
+                        width = 0
+                        height ++
+                    }  
+                })
+            })
+        }).then(() => {
+            console.log(this.props)
+            this.t1 = setTimeout(() => this.forceUpdate(), 2000)
+        })
+    }
 
     render() {
         return (
-            <div>
-            <table>
-               <tbody>
-                  {
-                        this.state.data.map((row, i) => 
-                              <TableRow key = {i} row = {row} />
-                        )
-                  }
-               </tbody>
-            </table>
-         </div>
+                <div>
+                <table>
+                <tbody>
+                    {
+                            this.state.data.map((row, i) =>
+                                <TableRow key = {i} row = {row} />
+                            )
+                    }
+                </tbody>
+                </table>
+            </div>
         );
     }
 }
 
 class TableRow extends React.Component {
     render() {
-       return (
+        return (
           <tr>
-             <td>{this.props.row[0].name}</td>
-             <td>{this.props.row[1].name}</td>
-             <td>{this.props.row[2].name}</td>
+             {
+                 this.props.row.map((element, i) =>
+                    <td key={i}>{element.name}</td>
+                )
+             }
           </tr>
        );
     }
